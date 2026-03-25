@@ -1080,7 +1080,10 @@
         try {
           // Remove the keyword from ALL policies for this org that contain it
           // This ensures "only 1 times allowed" in the display and database
-          const policiesFound = policies.filter(p => (p.keywordList || p.keyword_list || "").toLowerCase().includes(kwToRemove.toLowerCase()));
+          const policiesFound = policies.filter(p => {
+            const list = (p.keywordList || p.keyword_list || "").split(",").map(k => k.trim().toLowerCase());
+            return list.includes(kwToRemove.toLowerCase());
+          });
           
           for (const p of policiesFound) {
             const pid = p.id;
